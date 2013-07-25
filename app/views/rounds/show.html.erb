@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Pass:</b>
+  <%= @round.pass %>
+</p>
+
+<p>
+  <b>Position:</b>
+  <%= @round.position %>
+</p>
+
+<p>
+  <b>Winner:</b>
+  <%= @round.winner %>
+</p>
+
+
+<%= link_to 'Edit', edit_round_path(@round) %> |
+<%= link_to 'Back', rounds_path %>

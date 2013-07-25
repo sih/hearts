@@ -1,0 +1,21 @@
+development:
+  adapter: mysql
+  encoding: utf8
+  database: haaz
+  username: pemaquid
+  password: d4ma4risc0tt4
+  host: localhost
+test:
+  adapter: mysql
+  encoding: utf8
+  database: haaz_test
+  username: pemaquid
+  password: d4ma4risc0tt4
+  host: localhost
+production:
+  adapter: mysql
+  encoding: utf8
+  database: haaz
+  username: pemaquid
+  password: d4ma4risc0tt4
+  host: localhost
