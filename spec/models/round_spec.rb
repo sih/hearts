@@ -21,6 +21,7 @@ describe Round do
     
     before(:each) do
       @r = Round.new(:game_id => @g.id)
+      @r.save.should be_true
     end
     
     it "should create a player round record when valid" do
@@ -47,23 +48,27 @@ describe Round do
       @v = Game.new(:name => "Hoo")
       
       @r = Round.new(:game_id => @g.id)
+      @r.save
       
     end
     
     it "should add all players where there are players in a game" do
         @r.add_all
-        PlayerRound.count.should  == 2
+        @r = Round.find(@r.id)
+        @r.players.count.should == 2
     end
     
     it "should add no players where there are none" do
       @r.game_id = @v.id
       @r.add_all()
+      @r = Round.find(@r.id)
+      @r.players.count.should == 0
+      
     end
     
     
     
     
   end
-
 
 end

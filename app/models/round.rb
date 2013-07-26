@@ -1,6 +1,7 @@
 class Round < ActiveRecord::Base
   attr_accessible :pass, :position, :winner, :game_id
   has_many :player_rounds
+  has_many :players, through: :player_rounds
   belongs_to :game
   
   RIGHT = "R"
@@ -8,12 +9,9 @@ class Round < ActiveRecord::Base
   ACROSS = "A"
   NO_PASS = "X"
   
-  PASS_ORDER = [RIGHT,LEFT,ACROSS,NO_PASS]
-  
   def add_player(player=nil)
     unless (player.nil? or !player.games.include?(game))
-      pr = PlayerRound.new(:round_id => self.id, :player_id => player.id)
-      pr.save
+      self.players << player
     end
   end
   
@@ -23,14 +21,6 @@ class Round < ActiveRecord::Base
         add_player(p)
     end
     end
-  end
-  
-  
-  #
-  #
-  #
-  def next_pass(last_pass=RIGHT)
-    
   end
   
   
