@@ -15,6 +15,25 @@
   <%= @game.status %>
 </p>
 
+<p>
+  <b>Players:</b>
+  <% if @game.players.empty? %>
+	There aren't any players yet. Why not add some?!
+  <% else %>
+	<table>
+		<tr>
+			<th>Player</th>
+			<th>Points</th>
+		</tr>
+		<% @game.players.sort{|x,y| x.points(@game.id) <=> y.points(@game.id)}.each do |playa| %>
+			<td><%= playa.handle %></td>
+			<td><%= playa.points(@game.id) %></td>
+		<% end %>
+		<tr>
+	</table>
+  <% end %>
+</p>
 
 <%= link_to 'Edit', edit_game_path(@game) %> |
+<%= link_to 'Add Player', games_path %>
 <%= link_to 'Back', games_path %>

@@ -7,6 +7,10 @@ Haaz::Application.routes.draw do
 
   resources :games
 
+  post 'games/:id/player/:player_id' => 'games#add_player', :as => :game_add_player
+  get 'games/:id/rounds' => 'games#rounds', :as => :game_rounds  
+  post 'games/:id/round/:round_id/score' => 'games#score_round', :as => :game_score_round
+
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

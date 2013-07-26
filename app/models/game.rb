@@ -72,6 +72,7 @@ class Game < ActiveRecord::Base
       r.pass = self.next_pass
       r.save
       self.save
+      return r
     end
   end
 

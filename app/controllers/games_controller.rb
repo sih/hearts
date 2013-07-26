@@ -80,4 +80,27 @@ class GamesController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  #
+  # POST /games/1/player/10
+  #
+  def add_player
+    
+  end
+  
+  #
+  # GET /games/1/rounds
+  #
+  def rounds
+    
+  end
+  
+  #
+  # POST /games/1/round/2/score
+  #
+  def score_round
+    
+  end
+  
+  
 end

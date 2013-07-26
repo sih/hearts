@@ -14,6 +14,14 @@ class Player < ActiveRecord::Base
     end
   end
   
+  #
+  # The points the player has got in this game
+  #
+  def points(game_id)
+    return nil unless Game.exists?(game_id)
+    self.player_rounds.select{|pr| pr.game_id == game_id}.inject(0){|sum,pr| sum+pr.score}
+  end
+  
   
   
   
