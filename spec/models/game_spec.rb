@@ -125,8 +125,6 @@ describe Game do
     end
     
     
-    
-    
   end
 
   describe "when calculating the pass" do
@@ -180,5 +178,78 @@ describe Game do
     end
     
   end
+
+  describe "when calculating totals" do
+    
+    before(:each) do
+      @g = Game.new(valid_params)
+      @g.save.should be_true
+      
+      @g = Game.find(@g.id)
+      
+      @p1 = Player.new(:name => "jas")
+      @p1.save.should be_true
+      @p2 = Player.new(:name => "joe")
+      @p2.save.should be_true      
+      @p3 = Player.new(:name => "kate")
+      @p3.save.should be_true      
+      @p4 = Player.new(:name => "sid")                  
+      @p4.save.should be_true
+      
+      @g.add_player(@p1)
+      @g.add_player(@p2)
+      @g.add_player(@p3)
+      @g.add_player(@p4)                  
+      
+      @g.add_round
+      @g = Game.find(@g.id)
+      @g.rounds.size.should == 1
+      
+      @r = @g.rounds.first
+      @okay_scores = {"jas" => 10, "joe" => 10, "sid" => 3, "kate" => 3}
+      @more_okay_scores = {"jas" => 1, "joe" => 1, "sid" => 24, "kate" => 0}
+      
+    end
+    
+    it "should set the status of the game to finished if the game closes" do
+      @g.points = 10
+      @g.save
+      @r.score_round(@okay_scores)
+      @g = Game.find(@g.id)
+      @g.status.should == Game::FINISHED
+    end
+    
+    it "should set the summary scores of each player in the game" do
+      scores = @r.score_round(@okay_scores)
+      scores.each_pair do |player,score|
+        score.should == 10 if player.name == "jas" 
+        score.should == 10 if player.name == "joe"
+        score.should == 3 if player.name == "kate"
+        score.should == 3 if player.name == "sid"                           
+      end
+    end
+    
+    it "should create a new round if the game is not finished" do
+      @g.rounds.size.should == 1
+      scores = @r.score_round(@okay_scores)
+      @g = Game.find(@g.id)
+      @g.rounds.size.should == 2      
+    end
+    
+    it "should calculate scores for multiple rounds" do
+      scores = @r.score_round(@okay_scores)
+      @g = Game.find(@g.id)
+      new_round = @g.rounds.last
+      new_round.should_not == @r
+      latest_scores = new_round.score_round(@more_okay_scores)
+      latest_scores.each_pair do |player,score|
+        score.should == 11 if player.name == "jas" 
+        score.should == 11 if player.name == "joe"
+        score.should == 3 if player.name == "kate"
+        score.should == 27 if player.name == "sid"                           
+      end
+    end
+  end
+
 
 end

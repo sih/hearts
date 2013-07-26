@@ -3,15 +3,54 @@ class Game < ActiveRecord::Base
   FINISHED = "Finished"
   IN_PLAY="In Play"
   
-  attr_accessible :name, :points, :status, :config, :num_rounds
+  attr_accessible :name, :points, :status, :config, :num_rounds, :winner
+  attr_accessor :scores_by_player
   has_many :player_games    
   has_many :players, through: :player_games
   has_many :rounds
   before_create :set_defaults
+  
+  # TODO make name mandatory
 
 
   def in_play?
     status == IN_PLAY
+  end
+  
+  def finished?
+    status == FINISHED
+  end
+  
+  def calculate_totals
+    self.scores_by_player = {}
+    finished = false
+    return nil if points.nil?
+    players.each do |p|
+      score = p.player_rounds.inject(0){|sum,pr| sum+pr.score}
+      self.scores_by_player[p]=score
+      finished = true if score >= points
+    end
+    
+    if finished
+      self.status = FINISHED
+      who_won
+    else
+      self.add_round
+    end
+
+    self.save
+    return scores_by_player
+    
+  end
+  
+  def who_won
+    min = nil
+    self.scores_by_player.each_pair do |player,score|
+      if (min.nil? or score < min)
+        min = score
+        winner = player.name
+      end
+    end
   end
   
   #
@@ -36,7 +75,6 @@ class Game < ActiveRecord::Base
     end
   end
 
-
   
   #
   #
@@ -52,6 +90,7 @@ private
     self.status = IN_PLAY
     self.num_rounds = 0
     self.config = STANDARD
+    self.points = 100
   end
   
   def std_pass

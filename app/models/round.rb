@@ -15,12 +15,37 @@ class Round < ActiveRecord::Base
     end
   end
   
-  def add_all()
+  def add_all
     unless game.nil? or game.players.nil?
       game.players.each do |p|
         add_player(p)
+      end
     end
+  end
+  
+  #
+  # submit the scores for each player:score
+  #
+  def score_round(scores={})
+
+    return nil if scores.nil?
+    return nil unless game.in_play?
+    
+    total = scores.values.inject(0){|score,value| score+value}
+    return nil unless total == 26
+
+    scores.each_pair do |name,score|
+      playa = game.players.select{|p| p.name == name}.first
+      pr = playa.player_rounds.select{|pr| pr.round_id == self.id}.first
+      if pr
+        total += score
+        pr.score = score
+        pr.save
+      end
     end
+
+    game.calculate_totals
+    
   end
   
   
