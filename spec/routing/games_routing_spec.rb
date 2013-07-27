@@ -32,7 +32,7 @@ describe GamesController do
     end
     
     it "routes to #add_player" do
-      post("games/1/player/10").should route_to("games#add_player", :id => "1", :player_id => "10")
+      get("games/1/player/10").should route_to("games#add_player", :id => "1", :player_id => "10")
     end
     
     it "routes to #rounds" do
@@ -40,7 +40,7 @@ describe GamesController do
     end
     
     it "routes to #score_round" do
-      post("games/1/round/2/score").should route_to("games#score_round", :id => "1", :round_id => "2")
+      get("games/1/round/2/score").should route_to("games#score_round", :id => "1", :round_position => "2")
     end
 
   end

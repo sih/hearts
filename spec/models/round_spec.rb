@@ -97,6 +97,7 @@ describe Round do
 
       @too_high_scores = {"jas" => 10, "joe" => 10, "sid" => 10, "kate" => 10}
       @okay_scores = {"jas" => 10, "joe" => 10, "sid" => 3, "kate" => 3}
+      @mon_shot = {"jas" => 26, "joe" => 26, "sid" => 26, "kate" => 0}      
       
     end
     
@@ -143,6 +144,27 @@ describe Round do
           pr.score.should == 3          
         end
       end
+    end
+    
+    it "should recognize shooting the moon" do
+      @r.score_round(@mon_shot).should_not be_nil
+      g = Game.find(@g.id)
+      g.players.each do |playa|
+        pr = playa.player_rounds.select{|pround| pround.round_id = @r.id}.first
+        if playa.name == "jas"
+          pr.score.should == 26
+          pr.mon_shot.should be_false                             
+        elsif playa.name == "joe"
+          pr.score.should == 26          
+          pr.mon_shot.should be_false                   
+        elsif playa.name == "kate"
+          pr.score.should == 0 
+          pr.mon_shot.should be_true         
+        elsif playa.name == "sid"
+          pr.score.should == 26          
+          pr.mon_shot.should be_false                             
+        end
+      end      
     end
     
   end

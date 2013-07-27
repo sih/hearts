@@ -11,12 +11,6 @@
 </p>
 
 <p>
-  <b>Status:</b>
-  <%= @game.status %>
-</p>
-
-<p>
-  <b>Players:</b>
   <% if @game.players.empty? %>
 	There aren't any players yet. Why not add some?!
   <% else %>
@@ -36,6 +30,23 @@
   <% end %>
 </p>
 
-<%= link_to 'Edit', edit_game_path(@game) %> |
-<%= link_to 'Add Player', games_add_player_path(@game.id,1) %>
-<%= link_to 'Back', games_path %>
+<p>
+	<table>
+		<tr>
+			<th>Round Number</th>
+			<% @game.players.sort{|x,y| x.name <=> y.name}.each do |p|  %>
+				<th><%= p.handle %></th>
+			<% end %>
+		</tr>
+		<% @game.rounds.each do |r|  %>			
+			<tr>
+				<td><%= r.position %></td>
+				<% r.player_rounds.sort{|x,y| x.player.name <=> y.player.name}.each do |pr| %>
+					<td><%= pr.score %></td>
+				<% end %>
+			</tr>
+		<% end %>
+	</table>		
+
+
+</p>

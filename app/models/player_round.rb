@@ -14,6 +14,7 @@ class PlayerRound < ActiveRecord::Base
   
   def add_game_id
     self.game_id = self.round.game_id
+    self.mon_shot = false
     self.save
   end
   

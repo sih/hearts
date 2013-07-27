@@ -82,9 +82,19 @@ class GamesController < ApplicationController
   end
   
   #
-  # POST /games/1/player/10
+  # GET /games/1/player/10
   #
   def add_player
+    if Game.exists?(params[:id])
+      g = Game.find(params[:id])
+      p = Player.find(params[:player_id])
+      g.add_player(p)
+    end
+    
+    respond_to do |format|
+      format.html {redirect_to game_url(g)}
+      format.json {head :no_content}
+    end
     
   end
   
@@ -92,13 +102,40 @@ class GamesController < ApplicationController
   # GET /games/1/rounds
   #
   def rounds
-    
+    @game = Game.find(params[:id]) if Game.exists?(params[:id])
+    respond_to do |format|
+      format.html {render 'rounds'}
+    end
+
   end
   
   #
-  # POST /games/1/round/2/score
+  # GET /games/1/round/2/score
   #
   def score_round
+    # TODO implement this properly (i.e. POST the results up)
+    if Game.exists?(params[:id])
+      g = Game.find(params[:id])
+    
+      players = params[:players].split(",")
+      scores = params[:scores].split(",")
+    
+      scores_by_players={}
+    
+      players.each_with_index do |p,index|
+        scores_by_players[p]=scores[index].to_i
+      end
+      
+      round = g.rounds.select{|r| r.position == params[:round_position].to_i}.first
+      
+      round.score_round(scores_by_players) unless round.nil?
+      
+      respond_to do |format|
+        format.html {redirect_to games_rounds_url(g)}
+        format.json {head :no_content}
+      end      
+      
+    end
     
   end
   
