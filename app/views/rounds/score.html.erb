@@ -1,0 +1,22 @@
+<h1>Score Round</h1>
+
+<h2>Players</h2>
+
+<form method="post" action="/rounds/<%= @round.id %>/score">
+
+	<table>	
+		<tr>
+			<th>Player</th>
+			<th>Score</th>
+		</tr>
+		<% @round.players.sort{|x,y| x.name <=> y.name}.each do |playa| %>
+		<tr>
+			<td><%= playa.name %></td>
+			<td><input type="text" name="[<%= playa.name %>][score]"/></td>
+		</tr>
+		<% end %>
+	</table>
+	
+	<input type="submit" value="Save Scores">
+	
+</form>

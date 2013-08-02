@@ -80,4 +80,26 @@ class RoundsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def score
+    @round = Round.find(params[:id])
+    respond_to do |format|
+      format.html {render 'score'}
+    end
+  end
+  
+  def save_score
+    @round = Round.find(params[:id])
+    scores_by_player = {}
+    @round.players.each do |playa|
+      scores_by_player[playa.name]=params[playa.name]["score"].to_i
+    end
+    @round.score_round(scores_by_player)
+    respond_to do |format|
+      format.html { redirect_to games_rounds_url(@round.game) }
+      format.json { head :no_content }
+    end    
+    
+  end
+  
 end

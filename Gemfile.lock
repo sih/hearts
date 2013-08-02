@@ -47,6 +47,7 @@ GEM
     mini_portile (0.5.1)
     multi_json (1.7.7)
     mysql (2.8.1)
+    newrelic_rpm (3.6.6.147)
     nokogiri (1.6.0)
       mini_portile (~> 0.5.0)
     polyglot (0.3.3)
@@ -109,6 +110,7 @@ PLATFORMS
 DEPENDENCIES
   jquery-rails
   mysql (= 2.8.1)
+  newrelic_rpm
   rails (= 3.2.9)
   rspec-rails (= 2.10.1)
   rspec_tag_matchers (= 1.0.0)

@@ -11,6 +11,8 @@ Haaz::Application.routes.draw do
   get 'games/:id/rounds' => 'games#rounds', :as => :games_rounds  
   get 'games/:id/round/:round_position/score' => 'games#score_round', :as => :games_score_round
 
+  get 'rounds/:id/score' => 'rounds#score', :as => :round_score
+  post 'rounds/:id/score' => 'rounds#save_score', :as => :round_save_score  
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
