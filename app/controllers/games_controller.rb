@@ -102,9 +102,11 @@ class GamesController < ApplicationController
   # GET /games/1/rounds
   #
   def rounds
+    visualise = (!params[:visualise].nil? and ActiveRecord::ConnectionAdapters::Column.value_to_boolean(params[:visualise]))
     @game = Game.find(params[:id]) if Game.exists?(params[:id])
     respond_to do |format|
-      format.html {render 'rounds'}
+      format.html {render 'rounds'} unless visualise
+      format.html {render 'vrounds'} if visualise      
     end
 
   end
