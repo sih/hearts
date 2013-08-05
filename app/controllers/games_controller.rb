@@ -105,8 +105,13 @@ class GamesController < ApplicationController
     visualise = (!params[:visualise].nil? and ActiveRecord::ConnectionAdapters::Column.value_to_boolean(params[:visualise]))
     @game = Game.find(params[:id]) if Game.exists?(params[:id])
     respond_to do |format|
-      format.html {render 'rounds'} unless visualise
-      format.html {render 'vrounds'} if visualise      
+      format.html {
+        render 'rounds' unless visualise
+        render 'vrounds' if visualise 
+      }     
+      format.js {
+        render json: @game.rounds_to_json
+      }
     end
 
   end

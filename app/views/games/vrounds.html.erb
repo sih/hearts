@@ -7,14 +7,15 @@
 	<%= stylesheet_link_tag    "application", :media => "all" %>
 	<%= javascript_include_tag "application" %>
 	<%= csrf_meta_tags %>
+	<script>
+		gameId =  <%= @game.id %>; 
+	</script>
 </head>
 
 <body onload="init();">
 <div id="container">
 
     <div id="left-container">
-
-		<input id="boo" name="boo" type="hidden">Hoodie</input>
 
         <div class="text">
             <h4>

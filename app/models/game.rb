@@ -76,14 +76,36 @@ class Game < ActiveRecord::Base
     end
   end
 
-  
-  #
-  #
-  #
   def next_pass
     std_pass if self.config == Game::STANDARD
   end
-  
+
+  #
+  # Output an object as follows:
+  # {players:["north","south","east","west"],"rounds":[{"round":1,"north":13,"south":10,"east":3,"west",0},{"round":2,"north":3,"south":10,"east":8,"west",5},...]}
+  #
+  def rounds_to_json
+    output = {}
+    playas = self.players
+    if (!playas.empty?)
+      output["players"]=playas.collect{|p| p.name}
+      rounds = []      
+      self.rounds.sort{|x,y| x.position <=> y.position}.each do |r|
+        round = {}
+        # scores = {}
+        scores = []
+        playas.each do |p|  
+          #scores[p.name] = p.player_rounds.select{|pr| (pr.player_id == p.id and pr.round_id == r.id)}.first.score
+          scores << p.player_rounds.select{|pr| (pr.player_id == p.id and pr.round_id == r.id)}.first.score
+        end
+        round["num"]=r.position
+        round["scores"]=scores
+        rounds << round
+      end
+      output["rounds"]=rounds
+    end
+    output.to_json
+  end
 
 private
 
